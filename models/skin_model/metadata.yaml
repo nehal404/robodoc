@@ -1,0 +1,79 @@
+description: Ultralytics YOLO11n-cls model trained on /Users/nihal/Documents/grad1/dataset/datasets/classify
+  2
+author: Ultralytics
+date: '2025-05-26T12:01:52.187072'
+version: 8.3.145
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 1
+task: classify
+batch: 1
+imgsz:
+- 320
+- 320
+names:
+  0: Acne Spectrum
+  1: Alopecia
+  2: Atopic Dermatitis
+  3: Bacterial Skin Infections
+  4: Birthmark
+  5: Bullous Disease
+  6: Chicken Skin
+  7: Chronic Lupus
+  8: Cyst
+  9: Darier's Disease
+  10: Dark Circle
+  11: Dermatofibroma
+  12: Dry Skin
+  13: Eczema
+  14: Enlarged Pores
+  15: Epidermolysis Bullosa
+  16: Eyebag
+  17: Fine Lines
+  18: First-degree Burn
+  19: Flat Wart
+  20: Folliculitis
+  21: Hailey-Hailey Disease
+  22: Healthy Skin
+  23: Hemangioma
+  24: Hypopigmentation
+  25: Impetigo
+  26: Inflammatory Rashes
+  27: Keloid
+  28: Larva Migrans
+  29: Leishmaniasis
+  30: Leprosy
+  31: Lichen Planus
+  32: Lyme Disease
+  33: Melanocytic Lesions
+  34: Milium
+  35: Molluscum Contagiosum
+  36: Nevus
+  37: Nodule
+  38: Oily Skin
+  39: Onychomycosis (Nail Fungus)
+  40: Papule
+  41: Pigmentation Disorders
+  42: Porokeratosis
+  43: Psoriasis
+  44: Ringworm
+  45: Scars
+  46: Seborrheic Keratosis
+  47: Second-degree Burn
+  48: Skin Cancer
+  49: Skin Eruptions
+  50: Syringoma
+  51: Systemic Skin Disease
+  52: Third-degree Burn
+  53: Tungiasis
+  54: Vascular Lesion
+  55: Vascular Tumors
+  56: Viral Infections
+  57: Warts
+  58: Wrinkle
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false
+channels: 3
