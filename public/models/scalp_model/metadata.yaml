@@ -1,0 +1,35 @@
+description: Ultralytics YOLO11n-cls model trained on https://storage.googleapis.com/ultralytics-hub.appspot.com/users/vIDNh4XCxxYB3khNXlRQN2OmXsw2/datasets/y8fme5tjw4fsWt77Ren9/classify.zip?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=firebase-adminsdk-jsjt9%40ultralytics-hub.iam.gserviceaccount.com%2F20250525%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250525T001859Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=4c207d1f42eba923eadca50cc78ceeba5a4f43b93008a4613599fca7029209305b1d832924c1b4ceaa909d42a3d069a70342472939f52c4a93cbd361d77f91522ed268cc823f77cf8c11ca9ea403fcef3dbadbc5c6955a8414a5dd0e5639ccbe39e955181d60ed89c3f021195d7bcfbe11ac3aec9dc75f9816a20ad91cbb3cf8e408656da67267013ca21b29d853fae307461d44fc453d0c8e96182027223106d0b078d82da48e9de73ef9433c5c681ed69d6282268bd82e146d7bb625b076fc36edcf0f93e4fa582f0e5709612612e3eb8fe3c99be1deafc251fa0efd021fefc88c754e2508065a47ae0a48879fec6576d8c2ec0fe4da0d5f2dcdd8af309462
+author: Ultralytics
+date: '2025-05-25T22:35:03.344559'
+version: 8.3.144
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 1
+task: classify
+batch: 1
+imgsz:
+- 320
+- 320
+names:
+  0: Alopecia
+  1: Dandruff
+  2: Dermatitis
+  3: Dry Hair
+  4: Folliculitis
+  5: Grey Hair
+  6: Hair Loss
+  7: Hair Loss Stage 1
+  8: Hair Loss Stage 2
+  9: Hair Loss Stage 3
+  10: Hair Loss Stage 4
+  11: Head Lice
+  12: Healthy Scalp
+  13: Oily Hair
+  14: Psoriasis
+  15: Red Hair
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false
+channels: 3

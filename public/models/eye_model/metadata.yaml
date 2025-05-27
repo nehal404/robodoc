@@ -1,0 +1,35 @@
+description: Ultralytics YOLO11n-cls model trained on https://storage.googleapis.com/ultralytics-hub.appspot.com/users/vIDNh4XCxxYB3khNXlRQN2OmXsw2/datasets/if6y5KXP3zr2JjMAojcT/classify.zip?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=firebase-adminsdk-jsjt9%40ultralytics-hub.iam.gserviceaccount.com%2F20250516%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250516T081247Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=6a50a9ce78ee059bbeea09de11ea0f79b6412c14fcb1bdee20f934867f2fb305a70495ac3b21d62cbfbd8038e22b222ed09de01342076bc655ce3ec49b5c6ca4e1de5363f880104a4f03a4bc4f7f55209365afd390bfd5b65dca4a2e248bb0ed93418890f106da2a9fd6f822929749b66afdf84a7d1c4d9f208ebdbc848b22384cddd57602338eb7b8bf3b330a7f1d325b0d2aa2203cf6ae92619647b2cf71298036583e98c1c4ee7a8c38ab841c29d17429866d5700e08e4bcd4f85aeb569bb643d585e9158e9847bdee64b46c4e177e53241b8828d3aa497bf3a3261ab8293aa5dd8243f558fa23a9cde258cc7648c136a026a8087077f15cc6d452a9107f8
+author: Ultralytics
+date: '2025-05-18T14:20:42.007790'
+version: 8.3.139
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 1
+task: classify
+batch: 1
+imgsz:
+- 416
+- 416
+names:
+  0: ' Bitot''s spots'
+  1: ' Corneal Ulcer'
+  2: ' Ectropion'
+  3: ' Swelling-disease'
+  4: ' pterygium'
+  5: ' stye'
+  6: Acute Papillitis
+  7: Bacterial Papillitis
+  8: Jaundiced Eyes
+  9: Normal
+  10: Uveitis
+  11: Viral Papillitis
+  12: bulging eyes
+  13: cataract
+  14: conjunctivitis
+  15: crossed_eyes
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false
+channels: 3

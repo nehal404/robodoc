@@ -1,0 +1,33 @@
+description: Ultralytics YOLO11n-cls model trained on https://storage.googleapis.com/ultralytics-hub.appspot.com/users/vIDNh4XCxxYB3khNXlRQN2OmXsw2/datasets/f2dKvIFc6IOKxNp59sOr/classify%202.zip?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=firebase-adminsdk-jsjt9%40ultralytics-hub.iam.gserviceaccount.com%2F20250524%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250524T211010Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=792870e4ead687efae5671e3192453bbb50b40a642ebb7147c9a57467b26f5bfddc502f387dd13325dd879a63693c7d27760070a604b351f025343482870668e0016054137119534006a5d5732c5e61f4244e6eaa24395435283a675d766f2bba8ebce7ce047e4fae9d1954ff4124041c15cfc01a792f512aef012540c19bb44cf26b5a63b60ae8e4f0149a468dd73a2269dedae3c17a2da457e98b1510df8e52d4273a94b417318e1c6db59c5845d41f054e8ebe8919df669bdb1311e047f70e56adb5971c3d357504e9ccc95f557e57bd8cc1dd694ef9a36c2889b27e14077b582d34bc18da648006ea27ad1307d7de5243d18d8d79c037803ad91fdb6402e
+author: Ultralytics
+date: '2025-05-24T23:44:16.779746'
+version: 8.3.144
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 1
+task: classify
+batch: 1
+imgsz:
+- 416
+- 416
+names:
+  0: gums inflammation
+  1: mouth cancer
+  2: mouth lips ulcers lesions
+  3: oral thrush
+  4: teeth aligner
+  5: teeth caries decay
+  6: teeth dental abscess
+  7: teeth filling
+  8: teeth hypodontia
+  9: teeth mouth healthy
+  10: teeth surface issues
+  11: tongue abnormal
+  12: tongue diabetes
+  13: tongue healthy
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false
+channels: 3
