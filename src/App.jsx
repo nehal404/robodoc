@@ -6,16 +6,17 @@ import jsyaml from 'js-yaml';
 const AIProcessor = {
   async loadModelAndLabels(segment) {
     const segmentAssets = {
-      eye: { model: '/models/eye_model', yaml: '/models/eye_model/metadata.yaml' },
-      ear: { model: '/models/ear_model', yaml: '/models/ear_model/metadata.yaml' },
-      skin: { model: '/models/skin_model', yaml: '/models/skin_model/metadata.yaml' },
-      scalp: { model: '/models/scalp_model', yaml: '/models/scalp_model/metadata.yaml' },
-      teeth: { model: '/models/teeth_model', yaml: '/models/teeth_model/metadata.yaml' },
+      eye: { model: '/models/eye_model/model.json', yaml: '/models/eye_model/metadata.yaml' },
+      ear: { model: '/models/ear_model/model.json', yaml: '/models/ear_model/metadata.yaml' },
+      skin: { model: '/models/skin_model/model.json', yaml: '/models/skin_model/metadata.yaml' },
+      scalp: { model: '/models/scalp_model/model.json', yaml: '/models/scalp_model/metadata.yaml' },
+      teeth: { model: '/models/oral_model/model.json', yaml: '/models/oral_model/metadata.yaml' },
     };
     if (!segmentAssets[segment]) throw new Error(`Invalid segment: ${segment}`);
     const assets = segmentAssets[segment];
 
     const yamlResponse = await fetch(assets.yaml);
+    if (!yamlResponse.ok) throw new Error(`Failed to load YAML for ${segment}: ${yamlResponse.status}`);
     const yamlText = await yamlResponse.text();
     const yamlData = jsyaml.load(yamlText);
     const classNames = Object.values(yamlData.names);
