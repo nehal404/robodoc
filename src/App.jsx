@@ -1,27 +1,61 @@
+// src/App.jsx
 import { useState, useEffect, useRef } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import jsyaml from 'js-yaml';
+
+const BASE_URL = import.meta.env.BASE_URL || '/'; // Dynamic base path
+
+// GroqClient using Netlify Function
+const GroqClient = {
+  async createChatCompletion(messages) {
+    try {
+      const response = await fetch('/.netlify/functions/groq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ messages }),
+      });
+      if (response.ok) {
+        return await response.json();
+      }
+      throw new Error(`API Error: ${response.status}`);
+    } catch (e) {
+      throw new Error(`Network Error: ${e.message}`);
+    }
+  },
+};
 
 // AIProcessor Component
 const AIProcessor = {
   async loadModelAndLabels(segment) {
     const segmentAssets = {
-      eye: { model: '/models/eye_model/model.json', yaml: '/models/eye_model/metadata.yaml' },
-      ear: { model: '/models/ear_model/model.json', yaml: '/models/ear_model/metadata.yaml' },
-      skin: { model: '/models/skin_model/model.json', yaml: '/models/skin_model/metadata.yaml' },
-      scalp: { model: '/models/scalp_model/model.json', yaml: '/models/scalp_model/metadata.yaml' },
-      teeth: { model: '/models/oral_model/model.json', yaml: '/models/oral_model/metadata.yaml' },
+      eye: { model: `${BASE_URL}models/eye_model/model.json`, yaml: `${BASE_URL}models/eye_model/metadata.yaml` },
+      ear: { model: `${BASE_URL}models/ear_model/model.json`, yaml: `${BASE_URL}models/ear_model/metadata.yaml` },
+      skin: { model: `${BASE_URL}models/skin_model/model.json`, yaml: `${BASE_URL}models/skin_model/metadata.yaml` },
+      scalp: { model: `${BASE_URL}models/scalp_model/model.json`, yaml: `${BASE_URL}models/scalp_model/metadata.yaml` },
+      teeth: { model: `${BASE_URL}models/oral_model/model.json`, yaml: `${BASE_URL}models/oral_model/metadata.yaml` },
     };
     if (!segmentAssets[segment]) throw new Error(`Invalid segment: ${segment}`);
     const assets = segmentAssets[segment];
 
-    const yamlResponse = await fetch(assets.yaml);
-    const yamlText = await yamlResponse.text();
-    const yamlData = jsyaml.load(yamlText);
-    const classNames = Object.values(yamlData.names);
+    try {
+      console.log(`Fetching YAML: ${assets.yaml}`);
+      const yamlResponse = await fetch(assets.yaml);
+      if (!yamlResponse.ok) {
+        throw new Error(`Failed to load YAML for ${segment}: ${yamlResponse.status} ${yamlResponse.statusText}`);
+      }
+      const yamlText = await yamlResponse.text();
+      const yamlData = jsyaml.load(yamlText);
+      const classNames = Object.values(yamlData.names);
 
-    const model = await tf.loadGraphModel(assets.model);
-    return { model, classNames };
+      console.log(`Loading model: ${assets.model}`);
+      const model = await tf.loadGraphModel(assets.model);
+      return { model, classNames };
+    } catch (e) {
+      console.error(`Error loading model or YAML for ${segment}:`, e);
+      throw e;
+    }
   },
 
   async preprocessImage(imageFile, segment) {
@@ -88,60 +122,32 @@ const AIProcessor = {
   },
 };
 
-// GroqClient
-const GroqClient = {
-  async createChatCompletion(messages, apiKey) {
-    try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Accept': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({
-          messages,
-          model: 'meta-llama/llama-4-maverick-17b-128e-instruct',
-          temperature: 0.5,
-          max_tokens: 1024,
-        }),
-      });
-      if (response.ok) {
-        return await response.json();
-      }
-      throw new Error(`API Error: ${response.status}`);
-    } catch (e) {
-      throw new Error(`Network Error: ${e.message}`);
-    }
-  },
-};
-
 // HomePage Component
 const HomePage = ({ setPage }) => (
   <div className="container mx-auto p-4">
     <header className="flex items-center justify-between bg-blue-600 text-white p-4 rounded-lg">
       <div className="flex items-center">
-        <img src="/assets/logo.png" alt="Logo" className="h-12 mr-4" />
+        <img src={`${BASE_URL}assets/logo.png`} alt="Logo" className="h-12 mr-4" />
         <h1 className="text-2xl font-bold">RoboDoc</h1>
       </div>
-      <img src="/assets/lab_logo.png" alt="Lab Logo" className="h-12 rounded-full" />
+      <img src={`${BASE_URL}assets/lab_logo.png`} alt="Lab Logo" className="h-12 rounded-full" />
     </header>
     <div className="mt-6 space-y-6">
       <SectionCard
         title="Body Scan"
-        imagePath="/assets/body_scan.png"
+        imagePath={`${BASE_URL}assets/body_scan.png`}
         icons={['👁️', '👂', '🖐️', '🗣️', '🩺', '💆']}
         labels={['Eye', 'Ear', 'Skin', 'Throat', '', 'Scalp']}
         onSelect={() => setPage('body_scan')}
       />
       <SectionCard
         title="RoboDoc Chat"
-        imagePath="/assets/robo_doc_chat.png"
+        imagePath={`${BASE_URL}assets/robo_doc_chat.png`}
         onSelect={() => setPage('robo_doc_chat')}
       />
       <SectionCard
         title="Invest Checkup"
-        imagePath="/assets/invest_checkup.png"
+        imagePath={`${BASE_URL}assets/invest_checkup.png`}
         onSelect={() => setPage('invest_checkup')}
       />
     </div>
@@ -219,11 +225,11 @@ const BodyScan = ({ setPage }) => {
   };
 
   const checkItems = [
-    { title: 'Eyes Check', segment: 'eye', image: '/assets/eye.png' },
-    { title: 'Ears Check', segment: 'ear', image: '/assets/ear.png' },
-    { title: 'Skin Check', segment: 'skin', image: '/assets/skin.png' },
-    { title: 'Scalp Check', segment: 'scalp', image: '/assets/scalp.png' },
-    { title: 'Teeth Check', segment: 'teeth', image: '/assets/teeth.png' },
+    { title: 'Eyes Check', segment: 'eye', image: `${BASE_URL}assets/eye.png` },
+    { title: 'Ears Check', segment: 'ear', image: `${BASE_URL}assets/ear.png` },
+    { title: 'Skin Check', segment: 'skin', image: `${BASE_URL}assets/skin.png` },
+    { title: 'Scalp Check', segment: 'scalp', image: `${BASE_URL}assets/scalp.png` },
+    { title: 'Teeth Check', segment: 'teeth', image: `${BASE_URL}assets/teeth.png` },
   ];
 
   return (
@@ -319,16 +325,13 @@ const RoboDocChat = ({ setPage }) => {
 
     const language = detectLanguage(input);
     try {
-      const response = await GroqClient.createChatCompletion(
-        [
-          {
-            role: 'system',
-            content: 'You are named Robodoc. Please respond to all queries as if you are Robodoc, a knowledgeable and helpful assistant, keep your responses very short but informative. If the input is in Arabic, respond in Egyptian Arabic dialect.',
-          },
-          { role: 'user', content: input },
-        ],
-        import.meta.env.VITE_GROQ_API_KEY
-      );
+      const response = await GroqClient.createChatCompletion([
+        {
+          role: 'system',
+          content: 'You are named Robodoc. Please respond to all queries as if you are Robodoc, a knowledgeable and helpful assistant, keep your responses very short but informative. If the input is in Arabic, respond in Egyptian Arabic dialect.',
+        },
+        { role: 'user', content: input },
+      ]);
       setMessages([...newMessages, { sender: 'bot', text: response.choices[0].message.content }]);
     } catch (e) {
       setMessages([...newMessages, { sender: 'bot', text: language === 'en' ? `Sorry, something went wrong: ${e.message}` : `عذرا، حدث خطأ: ${e.message}` }]);
