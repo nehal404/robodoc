@@ -550,6 +550,6 @@ const App = () => {
       {page === 'invest_checkup' && <InvestCheckup setPage={setPage} />}
     </div>
   );
-};
+}; 
 
 export default App;
