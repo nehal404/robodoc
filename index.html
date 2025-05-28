@@ -1,12 +1,105 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RoboDoc</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboDoc</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-100">
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+<body>
+    <header>
+        <img src="assets/logo.png" alt="RoboDoc Logo" class="logo">
+        <img src="assets/lab_logo.png" alt="Lab Logo" class="lab-logo">
+        <h1>RoboDoc</h1>
+    </header>
+    <main>
+        <div class="card-container">
+            <div class="card" onclick="showBodyScan()">
+                <img src="assets/body_scan.png" alt="Body Scan">
+                <h2>Body Scan</h2>
+            </div>
+            <div class="card" onclick="showRoboDocChat()">
+                <img src="assets/robo_doc_chat.png" alt="RoboDoc Chat">
+                <h2>RoboDoc Chat</h2>
+            </div>
+            <div class="card" onclick="showInvestCheckup()">
+                <img src="assets/invest_checkup.png" alt="Invest Checkup">
+                <h2>Invest Checkup</h2>
+            </div>
+        </div>
+
+        <!-- Body Scan Section -->
+        <div id="bodyScan" class="section" style="display:none;">
+            <h2>Body Scan</h2>
+            <select id="segmentSelect">
+                <option value="ear">Ears Check</option>
+                <option value="eye">Eyes Check</option>
+                <option value="skin">Skin Check</option>
+                <option value="scalp">Scalp Check</option>
+                <option value="teeth">Teeth Check</option>
+            </select>
+            <input type="file" id="imageInput" accept="image/*">
+            <canvas id="preview"></canvas>
+            <p id="scanResult"></p>
+        </div>
+
+        <!-- RoboDoc Chat Section -->
+        <div id="roboDocChat" class="section" style="display:none;">
+            <h2>RoboDoc Chat</h2>
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+            <div id="chatOutput"></div>
+        </div>
+
+        <!-- Invest Checkup Section -->
+        <div id="investCheckup" class="section" style="display:none;">
+            <h2>Invest Checkup</h2>
+            <input type="text" id="patientName" placeholder="Patient Name">
+            <input type="number" id="patientAge" placeholder="Age">
+            <button onclick="processCheckup()">Submit</button>
+            <p id="checkupResult"></p>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.5.0/dist/tf.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
